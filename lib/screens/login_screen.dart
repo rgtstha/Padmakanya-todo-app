@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form/screens/home_screen.dart';
+import 'package:flutter_form/widgets/todo_elevated_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,8 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  bool isValid = false;
 
   @override
   void dispose() {
@@ -77,29 +77,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               const SizedBox(height: 40),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.green),
-                    foregroundColor: WidgetStatePropertyAll(Colors.white),
-                  ),
-                  onPressed: () {
-                    bool valid = _formKey.currentState!.validate();
+              TodoElevatedButton(
+                text: "Login",
+                onPressed: () {
+                  bool valid = _formKey.currentState!.validate();
 
-                    if (valid) {
-                      setState(() {
-                        isValid = true;
-                      });
-                    }
-                  },
-                  child: const Text("Login"),
-                ),
+                  if (valid) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  }
+                },
               ),
-              if (isValid)
-                Text(
-                  "Email is ${emailController.text} \nPassword is ${passwordController.text}",
-                ),
             ],
           ),
         ),
