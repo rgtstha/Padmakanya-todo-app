@@ -25,12 +25,16 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("TODO APP"),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
+            onPressed: () async {
+              TodoModel todo = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const TodoAddScreen(),
                 ),
               );
+
+              setState(() {
+                items.add(todo);
+              });
             },
             icon: const Icon(Icons.add),
           ),
@@ -51,6 +55,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return TodoItemWidget(
             todo: item,
+            onChanged: (bool? value) {
+              // if value is null then no operations are
+              // required. So, we immediately return if value
+              // is null.
+              if (value == null) return;
+
+              // Now, first find the item to change it's status.
+              final foundItem = items.firstWhere((todo) {
+                return todo.title == item.title;
+              });
+
+              // Find the item index
+              final foundItemIndex = items.indexOf(foundItem);
+
+              TodoModel editedItem = TodoModel(
+                title: foundItem.title,
+                isCompleted: value,
+              );
+
+              setState(() {
+                items[foundItemIndex] = editedItem;
+              });
+            },
           );
         },
       ),
