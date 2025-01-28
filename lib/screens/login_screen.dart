@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   bool valid = _formKey.currentState!.validate();
 
                   if (valid) {
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => const HomeScreen(),
                       ),

@@ -6,14 +6,17 @@ class TodoItemWidget extends StatelessWidget {
     super.key,
     required this.todo,
     required this.onChanged,
+    required this.onTap,
   });
 
   final TodoModel todo;
   final void Function(bool?)? onChanged;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       title: Text(todo.title),
       tileColor: Colors.lightGreen,
       trailing: Checkbox(
