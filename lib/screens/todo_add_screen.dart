@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form/models/todo_model.dart';
 import 'package:flutter_form/widgets/todo_elevated_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TodoAddScreen extends StatefulWidget {
   const TodoAddScreen({super.key});
@@ -47,7 +50,7 @@ class _TodoAddScreenState extends State<TodoAddScreen> {
               const SizedBox(height: 100),
               TodoElevatedButton(
                 text: "Add",
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String todoText = _todoController.text;
 
@@ -56,7 +59,24 @@ class _TodoAddScreenState extends State<TodoAddScreen> {
                       isCompleted: false,
                     );
 
-                    Navigator.of(context).pop(todo);
+                    Map<String, dynamic> todoMap = todo.toJson();
+                    String encodedTodo = jsonEncode(todoMap);
+
+                    final SharedPreferences prefs = await SharedPreferences.getInstance();
+                    List<String>? existingTodos = prefs.getStringList('todos');
+
+                    if (existingTodos != null) {
+                      existingTodos.add(encodedTodo);
+                      prefs.setStringList('todos', existingTodos);
+                    } else {
+                      await prefs.setStringList('todos', [encodedTodo]);
+                    }
+
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+
+                    // prefs.setSt
                   }
                 },
               ),

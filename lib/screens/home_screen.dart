@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form/models/todo_model.dart';
 import 'package:flutter_form/screens/todo_add_screen.dart';
 import 'package:flutter_form/widgets/todo_item_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +15,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<TodoModel> items = [];
+
+  @override
+  void initState() {
+    getDataFromSharedPreference();
+    super.initState();
+  }
+
+  void getDataFromSharedPreference() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String>? savedTodos = prefs.getStringList('todos');
+    if (savedTodos != null) {
+      List<TodoModel> todoLists = savedTodos.map((String todo) {
+        final decodedData = jsonDecode(todo);
+        TodoModel todoModel = TodoModel.fromJson(decodedData);
+        return todoModel;
+      }).toList();
+
+      setState(() {
+        items = todoLists;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
