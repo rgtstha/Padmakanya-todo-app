@@ -47,17 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () async {
-              TodoModel? todo = await Navigator.of(context).push(
+              await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const TodoAddScreen(),
                 ),
               );
 
-              if (todo != null) {
-                setState(() {
-                  items.add(todo);
-                });
-              }
+              getDataFromSharedPreference();
             },
             icon: const Icon(Icons.add),
           ),
