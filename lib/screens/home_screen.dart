@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
 
+              //refresh the list
               getDataFromSharedPreference();
             },
             icon: const Icon(Icons.add),
